@@ -37,7 +37,9 @@ app.post(
   function(req, res, next) {
     try {
       const inputURL = new URL(req.body.url);
-      dns.lookup(inputURL.host, (err, address, family) => {
+      if (inputURL.protocol.substr(0, 4) != 'http') 
+        res.json({ error: 'invalid url'});
+      else dns.lookup(inputURL.host, (err, address, family) => {
         console.log('address: %j family: IPv%s', address, family);
         if (err)
           res.json({ error: 'invalid url'});
